@@ -359,6 +359,15 @@
   #envEst.bad { background:var(--badbg); color:var(--bad); }
   #envDlg .acciones { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
   #envDlg .acciones button { flex:1 1 auto; padding:10px 12px; }
+  /* v1.2: que los nombres largos no ensanchen la pantalla en vertical */
+  html, body { max-width:100%; overflow-x:hidden; }
+  .siembras, .sb-lista, .sb-item, .sb-txt { min-width:0; max-width:100%; box-sizing:border-box; }
+  .siembras b, .sb-act, .sb-item b, .sb-item small, #statusMapa, #statusLibro { overflow-wrap:anywhere; word-break:break-word; }
+  .sb-item button { white-space:nowrap; }
+  @media (max-width:600px) {
+    .sb-item .sb-txt { flex:1 1 100%; }
+    .sb-item button { flex:1 1 0; padding-top:10px; padding-bottom:10px; }
+  }
 </style>
 </head>
 <body>
@@ -587,7 +596,7 @@
 const $ = id => document.getElementById(id);
 // Cambiar en cada versión que se sube: sirve para confirmar en la tablet que
 // ya tomó la última (se ve abajo en la pestaña Archivos).
-const VERSION_APP = '19-nov-2026 · Cruzas v1.1 (app propia)';
+const VERSION_APP = '19-nov-2026 · Cruzas v1.2 (vista vertical)';
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LOG = [];
 function log(...a){ LOG.push(a.map(x=>typeof x==='string'?x:JSON.stringify(x)).join(' ')); $('diag').textContent = LOG.slice(-250).join('\n'); }
