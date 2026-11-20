@@ -1,17 +1,15 @@
-/* Service worker de Verificación de Siembra (sitio propio).
+/* Service worker de Siembra Cruzas (repositorio siembraCruzas).
    Guarda la página y sus librerías en el teléfono para que abra sin
    internet. Va en la raíz del repositorio, junto a index.html.
 
    Al cambiar index.html no hace falta tocar este archivo: con internet
    siempre se baja la versión nueva. Cambia VERSION solo si cambias la lista
    de librerías. */
-const VERSION = 'siembracampo-v1';
+const VERSION = 'siembracruzas-v1';
 
 const BASE = self.registration.scope;              // https://semillanueva.github.io/SiembraCampo/
 const PAGINA = new URL('index.html', BASE).href;
-const PROPIOS = [PAGINA, new URL('manifest.webmanifest', BASE).href, new URL('icon.svg', BASE).href,
-  // App aparte para Cross y Self (Siembra Cruzas)
-  new URL('cruzas.html', BASE).href, new URL('cruzas.webmanifest', BASE).href, new URL('icon-cruzas.svg', BASE).href];
+const PROPIOS = [PAGINA, new URL('manifest.webmanifest', BASE).href, new URL('icon.svg', BASE).href];
 const LIBS = [
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js'
@@ -32,7 +30,7 @@ self.addEventListener('install', ev => {
 self.addEventListener('activate', ev => {
   ev.waitUntil((async () => {
     // Solo borra versiones viejas de ESTE sitio; no toca cachés de otras apps.
-    for (const k of await caches.keys()) if (k !== VERSION && k.startsWith('siembracampo-')) await caches.delete(k);
+    for (const k of await caches.keys()) if (k !== VERSION && k.startsWith('siembracruzas-')) await caches.delete(k);
     await self.clients.claim();
   })());
 });
