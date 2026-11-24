@@ -596,7 +596,7 @@
 const $ = id => document.getElementById(id);
 // Cambiar en cada versión que se sube: sirve para confirmar en la tablet que
 // ya tomó la última (se ve abajo en la pestaña Archivos).
-const VERSION_APP = '19-nov-2026 · Cruzas v1.2 (vista vertical)';
+const VERSION_APP = '24-nov-2026 · Cruzas v1.3 (mapas Plot_Code sin dos puntos)';
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LOG = [];
 function log(...a){ LOG.push(a.map(x=>typeof x==='string'?x:JSON.stringify(x)).join(' ')); $('diag').textContent = LOG.slice(-250).join('\n'); }
@@ -949,7 +949,11 @@ function etqCelda(k){ return String(k).toLowerCase().normalize('NFD')
   .replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,''); }
 function parseCeldaMapa(raw){
   if(raw==null) return null;
-  const text=String(raw).trim(); if(!text) return null;
+  let text=String(raw).trim(); if(!text) return null;
+  // Mapas de BMS sin dos puntos: "Plot_Code G6433 GID 82168 Plot_No 433 Rol  Fem".
+  // Se agregan los dos puntos después de cada etiqueta conocida y se lee igual que los demás.
+  if(!text.includes(':') && /plot[_\s]?(code|cod|no)\b/i.test(text))
+    text=text.replace(/(^|[\s|;,])(plot[_\s]?code|plot[_\s]?cod|plot[_\s]?no|plot|gid|role|rol|entry[_\s]?no|entry|rep|faja|range|surco|row)\s+(?=\S)/gi,'$1$2: ');
   const pares={};
   const rx=/([A-Za-zÁÉÍÓÚáéíóúñÑ][A-Za-zÁÉÍÓÚáéíóúñÑ_\s]{0,20}?):\s*(\S+)/g;
   let m; while((m=rx.exec(text))!==null) pares[etqCelda(m[1])]=m[2].trim();
